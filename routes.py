@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, request
-import urllib2, time, cgi
+import urllib2
 from bs4 import BeautifulSoup
 
 app = Flask(__name__) 
@@ -187,10 +187,6 @@ def dateToString(month, day, year):
 	return str(year)+'-'+ month+'-'+day
 
 """
-ERROR CHECK
- if song not in current chart
- stop_date is the same as current
-
 Inputs: 
 Song is string with title and artist
 Optional date must be in y-m-d format
