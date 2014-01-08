@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title> Music Data </title>
+	
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/pick.css') }}" type="text/css" media="screen"/>
+	<script>
+
+	function clickBox(e)
+	{
+		if (e.className=="box last") //Clicked unhighlighted box.
+		{	
+			//Only one box can be highlighted.
+			var elem = document.getElementsByClassName("box lastclick")[0];
+			if (elem != null) {
+				elem.className="box last";
+			}
+			e.className ="box lastclick";	
+			//Form for graph/chart will appear
+			document.getElementById("form").innerHTML='<form onsubmit=" return validate(this)" class="form" action="/' + e.id + '" method="post">Month <input type="text" name="month" id="month"></input>Day <input type="text" name="day" id="day"></input>Year <input type="text" name="year" id="year"></input><input type="submit" value="Submit" name="button"/> </input></form>'
+		}
+		else  //Clicked highlighted box
+		{
+			e.className ="box last";
+			document.getElementById("form").innerHTML=''		
+		}		
+	}
+
+	function validate(form) {
+		var thirty_day = [4,6,9,11];
+		var month=  parseInt(form.month.value);
+		var day=  parseInt(form.day.value);
+		var year=  parseInt(form.year.value);
+		if (isNaN(month) || isNaN(day) || isNaN(year)) {
+			alert("Please enter integers only.");
+			return false;
+		}
+		if (month<=0 || month>12) {
+			alert("Please enter a month between 1 and 12.");
+			return false;			
+		} 
+		if (year<=0) {
+			alert("Please enter a valid year.");
+			return false;				
+		}
+		if (thirty_day.indexOf(month)!=-1) { //Month with 31 days
+			if (day<=0 || day>31) {
+				alert("Please enter a valid day.");
+				return false;
+			} 
+		}
+		else if (month==2) {
+			//Calculate leap year for February
+			if ((year%4==0 && year%100!=0) || year%400==0) {
+				if (day<=0 || day>29) {
+					alert("Please enter a valid day.");
+					return false;
+				} 
+			} else {
+				if (day<=0 || day>28) {
+					alert("Please enter a valid day.");
+					return false;
+				}				
+			}
+
+		} else { //Month with 30 days
+			if (day<=0 || day>30) {
+				alert("Please enter a valid day.");
+				return false;
+			} 			
+		}
+		return true;		
+	}
+	</script>		
+</head>
+
+<body>
+	<h1><center><font face="sans-serif"> Data Visualizations for Billboard's {{ str_chart|safe }} Chart</font></center></h1>
+	<br><br>
+
+	<h3><font face="sans-serif"> Line Graphs on Chart Position</font></h3>
+	
+	<a href="{{ url_for('graph') }}">
+		<div class="box boxunclick" >Continous </div>
+	</a>
+	<div class="box last"  id="graphdate" onclick="clickBox(this)">Specific Date </div>
+	<br> <br> <br><br><br><br>
+
+	<h3><font face="sans-serif" onclick="clickBox(this)"> Previous Chart Comparisons</font></h3>
+	<a href="{{ url_for('chart') }}">	
+		<div class="box boxunclick" >Last Week's</div>
+	</a>
+	<div class="box last" id="chartdate" onclick="clickBox(this)">Specifc Date </div>
+	<div id="form"></div>
+</body>
+</html>

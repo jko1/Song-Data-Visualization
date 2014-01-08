@@ -1,0 +1,43 @@
+body {
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+h1 {
+	font-size: 50px;
+	text-align: center;
+}
+
+#new {
+	position: fixed;
+	top:100px;
+	left: 250px;
+}
+
+#old {
+	position: absolute;
+	top:100px;
+	left: 750px;
+}
+
+.result-box {
+	padding:20px 40px; 
+	width:350px;
+	border-radius:25px;
+	line-height:2;	
+	font-size: 18px; 
+	top:150px;
+}
+
+#past {
+	position: fixed;
+	right:200px;
+	border:2px solid #1d7373; 
+	background:#5dcec6;
+}
+
+#current {
+	position: fixed;
+	left:200px;
+	border:2px solid #bf3030;
+	background:#ff7373;
+}

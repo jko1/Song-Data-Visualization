@@ -1,0 +1,39 @@
+.box {
+	font-family: Georgia, serif;	
+	float:left;
+	clear:both;
+	padding:10px 40px; 
+	width:100px;
+	height:20px;
+	color: #FFFFFF;	
+	text-align:center;
+}
+
+.boxunclick{
+	border:1px solid #000000;
+	border-bottom: 0.5px solid #000000;
+	background:#5C5858;	
+}
+
+.boxclick {
+	background: #38B3B9;
+	border:1px solid #134648;
+	border-:bottom 0.5px solid #134648; 	
+}
+
+.last {
+	border:1px solid #000000;
+	background:#5C5858;	
+}
+
+.lastclick {
+	border:1px solid #134648;
+	background: #38B3B9;	
+}
+
+.form {
+	position:fixed;
+	right: 300px;
+	top: 300px;
+}
+

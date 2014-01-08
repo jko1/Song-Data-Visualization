@@ -1,0 +1,73 @@
+.songbox {
+	font-family: Georgia, serif;	
+	float:left;
+	clear:both;
+	padding:10px 40px; 
+	width:200px;
+	height:35px;
+	color: #FFFFFF;	
+	text-align:center;
+}
+
+.last {
+	border:1px solid #000000;
+	background:#5C5858;	
+}
+
+.songunclick{
+	border:1px solid #000000;
+	border-bottom: 0.5px solid #000000;
+	background:#5C5858;	
+}
+
+.songclick {
+	background: #38B3B9;
+	border:1px solid #134648;
+	border-bottom: 0.5px solid #134648; 	
+}
+
+.lastclick {
+	border:1px solid #134648;
+	background: #38B3B9;	
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: #2554C7;
+  stroke-width: 1.5px;
+}
+
+
+div.tooltip {   
+  font: sans-serif;	
+  position: absolute;           
+  text-align: center;           
+  width: 80px;                  
+  height: 30px;                 
+  padding: 2px;             
+  font: 12px sans-serif;        
+  background: #3CF4FD;   
+  border: 0px;      
+  border-radius: 7px;           
+  pointer-events: none;         
+}
+
+#graph {
+	position: absolute;
+	left:325px;
+	top: 75px;
+}
+
+
+
+

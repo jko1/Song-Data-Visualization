@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+<head> 
+	<title> Chart Differences </title>
+</head>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chart.css') }}" type="text/css" media="screen"/>
+<body>
+	<h1>{{ str_chart|safe }}</h1>
+	<h3 id="new">New Songs Compared to </h3>
+	<div id="current" class="result-box"></div>
+	<h3 id="old">This Week's Chart:</h3>
+	<div id="past" class="result-box"></div>
+
+</body>
+
+
+<script>
+var newsongs = {{ newsongs|safe }};
+var songs = {{ songs|safe }};
+var curr_date = {{ curr_date|safe }};
+var date = {{ date|safe }};
+
+//Current date chart heading
+document.getElementById("old").innerHTML += " " + curr_date[0];
+
+//What date for comparison box
+if (date.length==0) {
+	document.getElementById("new").innerHTML += " Last Week";
+} else {
+	document.getElementById("new").innerHTML += date[0];
+}
+
+//Special message if no differences exist
+if (newsongs.length==0) {
+	document.getElementById("current").innerHTML = "<center> No differences. </center>";
+} else { //Putting new songs
+	var text="";
+	for (var i=0; i<newsongs.length; i++)
+	{	
+		text = text + newsongs[i] + "<br>";
+	}
+	document.getElementById("current").innerHTML = text;
+}
+
+//Current Chart's Top Ten Songs
+text="";
+for ( i=0; i<songs.length; i++)
+{	
+	text = text + (i+1).toString() + ". " + songs[i] + "<br>";
+}
+document.getElementById("past").innerHTML = text;
+
+</script>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/radio.css') }}" type="text/css" media="screen"/>
+
+<body>
+	<h1><center>Data Visualization for Billboard Charts</center></h1>
+	<h2><center>Pick a chart. </center></h2>
+	<form onsubmit=" return validate(this)" class="form" id="form" action="/pick" method="post" >
+	<div id="col"></div>
+
+	</form>
+</body>
+<script>
+
+function validate(form) {
+	var radio = form.chart;
+	for (var j=0; j<chartname.length; j++) {
+		if (radio[j].checked) {
+			return true;
+		}
+	}
+	alert("Choose a radio");
+	return false;
+}
+
+
+
+var chartname=['Hot 100', 'Radio Songs', 'Digital Songs', 'Streaming Songs', 'On-Demand Songs', 'Ringtones', 'Heatseekers Songs', 'Pop Songs', 'Adult Pop Songs', 'Country Songs', 'Country Airplay', 'Country Digital Songs',  'Country Streaming Songs', 'Rock Songs', 'Rock Airplay', 'Rock Digital Songs', 'Rock Streaming Songs', 'Hot Mainstream Rock Tracks',  'Alternative Songs', 'Dance/Electronic Songs', 'Dance/Electronic Digital Songs'];
+var chart;
+var text="";
+
+for (var i=0;i<chartname.length;i++) {
+	chart=chartname[i];
+	text += '<input type="radio" name="chart" value="' + chart +'">' + chart +'<br>';	
+}
+text += '	<input type="submit" value="Submit" name="button"/> </input>';
+document.getElementById("col").innerHTML = text;
+</script>
+</html>

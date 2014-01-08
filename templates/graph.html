@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Graph Continuous</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/graph.css') }}" type="text/css" media="screen"/>
+	<body>
+		<h1 id="title">{{ str_chart|safe }}</h1>
+
+		<div id="songs"></div>
+		<div id="graph"></div>
+
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	</body>
+
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script>
+	var date = {{ date|safe }};
+	var data = {{ data|safe }};
+	var songs = {{ songs|safe }};
+
+//If specific date is chosen
+if (date.length!=0) {
+	document.getElementById("title").innerHTML += ": From " + date[0] + "/" + date[1] + "/" + date[2]; 
+}
+
+//Generate boxes with songs from this week.
+for (var i=0; i<(songs.length-1); i++)
+{	
+	document.getElementById("songs").innerHTML += '<span id="' + i + '" class="songbox songunclick"  onclick="clickSong(this)">' + songs[i] + "</span>"
+}
+document.getElementById("songs").innerHTML += '<span id="10" class="songbox last"  onclick="clickSong(this)">' + songs[9] + "</span>"
+
+
+function drawGraph(data) {
+	var margin=50,
+	width=900,
+	height=450;
+
+	var parseDate = d3.time.format("%Y-%m-%d").parse;
+	var x = d3.time.scale().range([0, width]);
+	var y = d3.scale.linear().range([height,0]);
+	var xAxis = d3.svg.axis().scale(x)
+	.orient("bottom").ticks(d3.time.months,1)
+	.tickFormat(d3.time.format('%b %Y'));
+
+	var yAxis = d3.svg.axis().scale(y)
+	.orient("left").ticks(5)
+
+
+	var line = d3.svg.line()
+	.x(function(d) { return x(d.date); })
+	.y(function(d) { return y(d.position); })   
+
+
+	data.forEach(function(d) {
+		d.date = parseDate(d[1]);
+		d.position = d[0];
+	});  
+
+	var svg = d3.select("#graph").append("svg")
+	.attr("width", width + 2.5*margin)
+	.attr("height", height + 2*margin)
+	.append("g")
+	.attr("transform", "translate(" + margin + "," + margin + ")");
+
+	x.domain(d3.extent(data, function(d) { return d.date; }));
+	y.domain([10,1]);
+
+
+	svg.append("g")
+	.attr("class", "x axis")
+	.attr("transform", "translate(0," + height + ")")
+	.attr("y2", parseDate(data[0][1]))
+	.call(xAxis);
+
+	svg.append("g")
+	.attr("class", "y axis")
+	.attr("transform", "translate(-15,0)")		
+	.call(yAxis)
+	.append("text")
+	.attr("transform", "translate(20,-20)")		
+	.attr("y", 6)
+	.attr("dy", ".71em")
+	.style("text-anchor", "end")
+	.text("Position");
+
+	svg.append("path")
+	.datum(data)
+	.attr("class", "line")
+	.attr("d", line);
+
+	
+	var formatTime = d3.time.format("%b %e"+", "+ "%Y");
+	var div = d3.select("body").append("div")   
+	.attr("class", "tooltip")               
+	.style("opacity", 0);
+
+	svg.selectAll("circle")
+	.data(data)
+	.enter().append("circle")
+	.attr("fill", "#151B8D")
+	.attr("cx", function(d) {
+		return x(d.date);
+	})
+	.attr("cy", function(d) {
+		return y(d.position);
+	})
+	.attr("r", 5)
+	.on("mouseover", function(d) {      
+		div.transition()        
+		.duration(200)      
+		.style("opacity", .85);      
+		div .html("#"  + d.position + "<br>" + formatTime(d.date))  
+		.style("left", (d3.event.pageX -40) + "px")     
+		.style("top", (d3.event.pageY - 45) + "px");    
+	})                  
+	.on("mouseout", function(d) {       
+		div.transition()        
+		.duration(500)      
+		.style("opacity", 0);   
+	});
+
+}
+
+
+function clickSong(e)
+{
+	if (e.className=="songbox songunclick") //Clicked on unhighlighted box.
+	{
+		document.getElementById('graph').innerHTML='';	//Delete graph if exists.
+		var elem = document.getElementsByClassName("songbox songclick");
+		if (elem.length > 0) { //Only one box can be highlighted
+			for (var i=0; i<elem.length;i++) {
+				elem[i].className="songbox songunclick";
+			}
+		}
+		//Special case for last box
+		var elem = document.getElementsByClassName("songbox lastclick")[0];
+		if (elem != null) { 
+			elem.className="songbox last";
+		}	
+		e.className ="songbox songclick";
+		drawGraph(data[parseInt(e.id)]);
+
+	}
+	//Special cases for last box.
+	else if (e.className=="songbox songclick") //Want to unhighlight
+	{
+		e.className ="songbox songunclick";	
+		document.getElementById('graph').innerHTML='';
+	}
+	else if (e.className=="songbox last")
+	{
+		document.getElementById('graph').innerHTML='';
+		var elem = document.getElementsByClassName("songbox songclick");
+		if (elem.length >0) {
+			for (var i=0; i<elem.length;i++) {
+				elem[i].className="songbox songunclick";
+			}
+		}		
+		e.className ="songbox lastclick";	
+		drawGraph(data[9]);		
+	}
+	else  
+	{
+		e.className ="songbox last";	
+		document.getElementById('graph').innerHTML='';
+	}		
+}
+
+</script>
+</html>
